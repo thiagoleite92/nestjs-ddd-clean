@@ -35,3 +35,14 @@ Authorization: Bearer {{authToken}}
   "title": "nova pergunta maneira",
   "content": "conteudo da nova pergunta maneira"
 }
+
+###
+
+
+# @name fetch_recent_questions
+Get {{base_url}}/questions?page=2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+
