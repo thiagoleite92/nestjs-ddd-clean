@@ -23,15 +23,15 @@ Content-Type: application/json
   "password": "Senha@123"
 }
 
-### 
+###
+
 
 # @name create_qustion
-
 POST {{base_url}}/questions
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "email": "jonas.mascarenhas@gmail.com",
-  "password": "Senha@123"
+  "title": "nova pergunta maneira",
+  "content": "conteudo da nova pergunta maneira"
 }
