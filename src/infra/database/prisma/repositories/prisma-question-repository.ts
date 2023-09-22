@@ -9,10 +9,6 @@ import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 export class PrismaQuestionRepository implements QuestionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findBySlug(slug: string) {
-    throw new Error('Method not implemented.')
-  }
-
   async findById(questionId: string) {
     const question = await this.prisma.question.findUnique({
       where: { id: questionId },
@@ -21,19 +17,46 @@ export class PrismaQuestionRepository implements QuestionsRepository {
     return question ? PrismaQuestionMapper.toDomain(question) : null
   }
 
-  fetchManyRecent(params: PaginationParams): Promise<Question[]> {
-    throw new Error('Method not implemented.')
+  async findBySlug(slug: string) {
+    const question = await this.prisma.question.findUnique({
+      where: { slug },
+    })
+
+    return question ? PrismaQuestionMapper.toDomain(question) : null
   }
 
-  create(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async fetchManyRecent({ page }: PaginationParams): Promise<Question[]> {
+    const questions = await this.prisma.question.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return questions.map(PrismaQuestionMapper.toDomain)
   }
 
-  save(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async create(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.create({ data })
   }
 
-  delete(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async save(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.update({
+      where: { id: data.id },
+      data,
+    })
+  }
+
+  async delete(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.delete({
+      where: { id: data.id },
+    })
   }
 }
