@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Question,
   QuestionProps,
-} from '@/domain/forum/enterprise/entities/questions'
+} from '@/domain/forum/enterprise/entities/question'
 
 export const makeQuestion = (
   override: Partial<QuestionProps> = {},

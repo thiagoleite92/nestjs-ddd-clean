@@ -1,6 +1,6 @@
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { CreateQuestionUseCase } from './create-question'
-import { Question } from '../../enterprise/entities/questions'
+import { Question } from '../../enterprise/entities/question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-list-repository'
 
