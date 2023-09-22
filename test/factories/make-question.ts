@@ -6,17 +6,19 @@ import {
   QuestionProps,
 } from '@/domain/forum/enterprise/entities/question'
 
-export const makeQuestion = (
+export function makeQuestion(
   override: Partial<QuestionProps> = {},
   id?: UniqueEntityID,
-) =>
-  Question.create(
+) {
+  const question = Question.create(
     {
       authorId: new UniqueEntityID(),
       title: faker.lorem.sentence(),
       content: faker.lorem.text(),
-      attachmentIds: [],
       ...override,
     },
     id,
   )
+
+  return question
+}
