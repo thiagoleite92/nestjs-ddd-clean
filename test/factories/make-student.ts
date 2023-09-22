@@ -13,7 +13,7 @@ export function makeStudent(
   const student = Student.create(
     {
       name: faker.person.fullName(),
-      email: faker.internet.email(),
+      email: faker.internet.email().toLowerCase(),
       password: faker.internet.password(),
       ...override,
     },
