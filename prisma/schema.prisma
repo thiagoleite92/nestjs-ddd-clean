@@ -16,13 +16,15 @@ enum UserRole {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  password  String
-  role      UserRole   @default(STUDENT)
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  role     UserRole @default(STUDENT)
+
   questions Question[]
   answers   Answers[]
+  comments  Comment[]
 
   @@map("users")
 }
@@ -40,6 +42,7 @@ model Question {
   author     User      @relation(fields: [authorId], references: [id])
   bestAnswer Answers?  @relation("bestAnswer", fields: [bestAnswerId], references: [id])
   answers    Answers[]
+  comments   Comment[]
 
   @@map("questions")
 }
@@ -55,6 +58,31 @@ model Answers {
   author       User      @relation(fields: [authorId], references: [id])
   bestAnswerOn Question? @relation("bestAnswer")
   question     Question  @relation(fields: [questionId], references: [id])
+  comments     Comment[]
 
   @@map("answers")
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  content    String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  authorId   String   @map("author_id")
+  questionId String?  @map("question_id")
+  answersId  String?  @map("answers_id")
+
+  question Question? @relation(fields: [questionId], references: [id])
+  answer   Answers?  @relation(fields: [answersId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id])
+
+  @@map("comments")
+}
+
+model Attachment {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  @@map("attachments")
 }
