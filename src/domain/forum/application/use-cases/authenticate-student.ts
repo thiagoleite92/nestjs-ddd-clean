@@ -48,8 +48,6 @@ export class AuthenticateStudentUseCase {
       sub: student.id.toString(),
     })
 
-    await this.studentsRepository.create(student)
-
     return right({
       accessToken,
     })

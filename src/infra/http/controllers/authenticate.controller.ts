@@ -10,6 +10,7 @@ import { compare } from 'bcryptjs'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
+import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
 
 const authenticateBodySchema = z.object({
   email: z.any(),
@@ -25,8 +26,8 @@ type AuthenticateResponse = {
 @Controller('/sessions')
 export class AuthenticateController {
   constructor(
+    private readonly authenticateStudent: AuthenticateStudentUseCase,
     private readonly jwt: JwtService,
-    private readonly prisma: PrismaService,
   ) {}
 
   @Post()
@@ -36,16 +37,16 @@ export class AuthenticateController {
   ): Promise<AuthenticateResponse> {
     const { email, password } = body
 
-    const user = await this.prisma.user.findUnique({ where: { email } })
+    const result = await this.authenticateStudent.execute({
+      email,
+      password,
+    })
 
-    if (!user) throw new UnauthorizedException('User credentials do not match')
+    if (result.isLeft()) {
+      throw new Error('Deu ruim')
+    }
 
-    const isPasswordValid = await compare(password, user.password)
-
-    if (!isPasswordValid)
-      throw new UnauthorizedException('User credentials do not match')
-
-    const accessToken = await this.jwt.sign({ sub: user.id })
+    const { accessToken } = result.value
 
     return { access_token: accessToken }
   }
