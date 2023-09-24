@@ -7,12 +7,11 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { compare } from 'bcryptjs'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
 import { WrongCredentialsError } from '@/domain/forum/application/use-cases/errors/wrong-credentials-error'
+import { IsPublic } from '@/infra/auth/decorators/is-public.decorator'
 
 const authenticateBodySchema = z.object({
   email: z.any(),
@@ -25,6 +24,7 @@ type AuthenticateResponse = {
   access_token: string
 }
 
+@IsPublic()
 @Controller('/sessions')
 export class AuthenticateController {
   constructor(
