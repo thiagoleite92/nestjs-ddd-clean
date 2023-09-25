@@ -39,18 +39,4 @@ export class CreateQuestionController {
       throw new BadRequestException()
     }
   }
-
-  private createFormatText(text: string) {
-    const slugText = text
-      .normalize('NFKD')
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-      .replace(/_/g, '-')
-      .replace(/--+/g, '-')
-      .replace(/-$/g, '')
-
-    return slugText
-  }
 }

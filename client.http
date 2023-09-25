@@ -44,5 +44,17 @@ Get {{base_url}}/questions
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
+###
+
+# @name edit_question
+PUT {{base_url}}/questions/8bec7e9a-cbc5-4f15-9616-9733b4f024a5
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "nova pergunta maneira editada",
+  "content": "conteudo da nova pergunta maneira"
+}
+
 
 
