@@ -18,8 +18,10 @@ export class PrismaStudentMapper {
     email,
     password,
     name,
+    id,
   }: Student): Prisma.UserUncheckedCreateInput {
     return {
+      id: id.toString(),
       email,
       password,
       name,
