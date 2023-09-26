@@ -21,7 +21,7 @@ describe('Use Case -> Answer Question', () => {
   it('create an answer', async () => {
     const result = await sut.execute({
       content: 'nova resposta',
-      instructorId: '1',
+      authorId: '1',
       questionId: '2',
       attachmentsIds: ['1', '2'],
     })
