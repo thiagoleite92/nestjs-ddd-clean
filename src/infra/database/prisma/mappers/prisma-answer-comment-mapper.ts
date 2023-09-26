@@ -40,7 +40,7 @@ export class PrismaAnswerCommentMapper {
       answerId: answerId.toString(),
       content,
       createdAt,
-      updatedAt: updatedAt || null,
+      updatedAt,
     }
   }
 }
