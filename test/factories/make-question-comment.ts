@@ -30,12 +30,12 @@ export class QuestionCommentFactory {
   async makePrismaQuestionComment(
     data: Partial<QuestionCommentProps> = {},
   ): Promise<QuestionComment> {
-    const questioncomment = makeQuestionComment(data)
+    const questionComment = makeQuestionComment(data)
 
     await this.prisma.comment.create({
-      data: PrismaQuestionCommentMapper.toPrisma(questioncomment),
+      data: PrismaQuestionCommentMapper.toPrisma(questionComment),
     })
 
-    return questioncomment
+    return questionComment
   }
 }
