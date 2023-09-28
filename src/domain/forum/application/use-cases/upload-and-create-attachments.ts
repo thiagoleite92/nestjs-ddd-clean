@@ -20,7 +20,7 @@ type UploadAndCreateAttachmentUseCaseResponse = Either<
 
 @Injectable()
 export class UploadAndCreateAttachmentUseCase {
-  mimeTypeRegex = /^(image\/(jpeg|png)|application\/(pdf))$/
+  private mimeTypeRegex = /^(image\/(jpeg|png)|application\/(pdf))$/
 
   constructor(
     private readonly attachmentRepository: AttachmentsRepository,
