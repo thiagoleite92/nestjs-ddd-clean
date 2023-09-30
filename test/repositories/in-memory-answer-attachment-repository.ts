@@ -7,7 +7,7 @@ export class InMemoryAnswerAttachmentRepository
   public items: AnswerAttachment[] = []
 
   async findManyByAnswerId(answerId: string) {
-    return this.items.filter((item) => item.id.toString() === answerId)
+    return this.items.filter((item) => item.answerId.toString() === answerId)
   }
 
   async createMany(attachments: AnswerAttachment[]): Promise<void> {

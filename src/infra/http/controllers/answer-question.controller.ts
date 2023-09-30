@@ -13,11 +13,10 @@ import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answ
 
 const answerQuestionBodySchema = z.object({
   content: z.string(),
+  attachments: z.array(z.string().uuid()),
 })
 
 type AnswerQuestionBodySchema = z.infer<typeof answerQuestionBodySchema>
-
-type AnswerQuestionResponse = void
 
 @Controller('/questions/:questionId/answers')
 export class AnswerQuestionController {
@@ -29,8 +28,12 @@ export class AnswerQuestionController {
     body: AnswerQuestionBodySchema,
     @CurrentUser() user: UserPayload,
     @Param('questionId') questionId: string,
-  ): Promise<AnswerQuestionResponse> {
-    const { content } = body
+  ) {
+    const { content, attachments } = body
+    console.log(
+      '🚀 ~ file: answer-question.controller.ts:35 ~ AnswerQuestionController ~ attachments:',
+      attachments,
+    )
 
     const { sub: authorId } = user
 
@@ -38,7 +41,7 @@ export class AnswerQuestionController {
       authorId,
       questionId,
       content,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
     })
 
     if (result.isLeft()) {
