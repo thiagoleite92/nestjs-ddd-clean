@@ -55,8 +55,6 @@ export class EditQuestionUseCase {
       currentQuestionAttachments,
     )
 
-    console.log(currentQuestionAttachments, 'AQUI')
-
     const questionAttachments = attachmentsIds.map((attachmentId) => {
       return QuestionAttachment.create({
         attachmentId: new UniqueEntityID(attachmentId),
