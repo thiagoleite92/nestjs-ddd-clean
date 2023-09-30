@@ -4,7 +4,7 @@ import { makeQuestion } from 'test/factories/make-question'
 import { Slug } from '../../enterprise/entities/value-object/slug'
 import { Question } from '../../enterprise/entities/question'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-list-repository'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository

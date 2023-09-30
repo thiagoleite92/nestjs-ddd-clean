@@ -1,25 +1,27 @@
 import { Either, left, right } from '@/core/either'
-import { Question } from '../../enterprise/entities/question'
+import { Question } from '@/domain/forum/enterprise/entities/question'
 import { QuestionsRepository } from '../repositories/questions-repository'
-import { NotAllowedError } from '@/core/errors/not-allowed-error'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { QuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
-import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
-import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
+import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
+import { QuestionAttachmentList } from '@/domain/forum/enterprise/entities/question-attachment-list'
+import { QuestionAttachment } from '@/domain/forum/enterprise/entities/question-attachment'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface EditQuestionUseCaseRequest {
   authorId: string
-  content: string
-  title: string
   questionId: string
+  title: string
+  content: string
   attachmentsIds: string[]
 }
 
 type EditQuestionUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
-  { question: Question }
+  {
+    question: Question
+  }
 >
 
 @Injectable()
@@ -30,10 +32,10 @@ export class EditQuestionUseCase {
   ) {}
 
   async execute({
-    questionId,
-    content,
-    title,
     authorId,
+    questionId,
+    title,
+    content,
     attachmentsIds,
   }: EditQuestionUseCaseRequest): Promise<EditQuestionUseCaseResponse> {
     const question = await this.questionsRepository.findById(questionId)
@@ -42,7 +44,7 @@ export class EditQuestionUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (question?.authorId.toString() !== authorId) {
+    if (authorId !== question.authorId.toString()) {
       return left(new NotAllowedError())
     }
 
@@ -52,6 +54,8 @@ export class EditQuestionUseCase {
     const questionAttachmentList = new QuestionAttachmentList(
       currentQuestionAttachments,
     )
+
+    console.log(currentQuestionAttachments, 'AQUI')
 
     const questionAttachments = attachmentsIds.map((attachmentId) => {
       return QuestionAttachment.create({
@@ -68,6 +72,8 @@ export class EditQuestionUseCase {
 
     await this.questionsRepository.save(question)
 
-    return right({ question })
+    return right({
+      question,
+    })
   }
 }
