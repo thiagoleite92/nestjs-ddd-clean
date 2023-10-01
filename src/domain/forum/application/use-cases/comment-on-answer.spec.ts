@@ -5,17 +5,22 @@ import { InMemoryAnswerCommentsRepository } from 'test/repositories/in-memory-an
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { InMemoryAnswerAttachmentRepository } from 'test/repositories/in-memory-answer-attachment-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let sut: CommentOnAnswerUseCase
 
 describe('Use Case -> Create AnswerComment Comment', () => {
   beforeEach(() => {
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryAnswerAttachmentsRepository =
       new InMemoryAnswerAttachmentRepository()
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository()
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository,
+    )
     inMemoryAnswersRepository = new InMemoryAnswersRepository(
       inMemoryAnswerAttachmentsRepository,
     )

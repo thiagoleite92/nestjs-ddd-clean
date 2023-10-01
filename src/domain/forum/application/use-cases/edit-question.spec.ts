@@ -6,18 +6,27 @@ import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { Question } from '../../enterprise/entities/question'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachment-repository'
 import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachment-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let sut: EditQuestionUseCase
 
 describe('Use Case -> Edit Question', () => {
   beforeEach(() => {
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+
     inMemoryQuestionAttachmentRepository =
       new InMemoryQuestionAttachmentRepository()
 
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentRepository,
+      inMemoryAttachmentsRepository,
+      inMemoryStudentsRepository,
     )
     sut = new EditQuestionUseCase(
       inMemoryQuestionsRepository,
