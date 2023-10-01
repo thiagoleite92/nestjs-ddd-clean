@@ -69,8 +69,14 @@ describe('Fetch Question Comments (E2E)', () => {
     expect(commentOnDatabse).toBeDefined()
     expect(response.body).toEqual({
       comments: expect.arrayContaining([
-        expect.objectContaining({ content: c2.content }),
-        expect.objectContaining({ content: c1.content }),
+        expect.objectContaining({
+          content: c2.content,
+          authorName: student.name,
+        }),
+        expect.objectContaining({
+          content: c1.content,
+          authorName: student.name,
+        }),
       ]),
     })
   })
