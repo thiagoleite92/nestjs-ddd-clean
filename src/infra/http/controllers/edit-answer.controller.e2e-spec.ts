@@ -57,6 +57,8 @@ describe('Edit Answer (E2E)', () => {
         content: 'Answer Edited',
       })
 
+    console.log(response)
+
     expect(response.statusCode).toEqual(204)
 
     const answerOnDatabase = await prisma.answer.findUnique({
