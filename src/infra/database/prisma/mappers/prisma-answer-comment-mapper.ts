@@ -26,21 +26,18 @@ export class PrismaAnswerCommentMapper {
     )
   }
 
-  static toPrisma({
-    authorId,
-    content,
-    id,
-    answerId,
-    createdAt,
-    updatedAt,
-  }: AnswerComment): Prisma.CommentUncheckedCreateInput {
+  static toPrisma(
+    answerComment: AnswerComment,
+  ): Prisma.CommentUncheckedCreateInput {
     return {
-      id: id.toString(),
-      authorId: authorId.toString(),
-      answerId: answerId.toString(),
-      content,
-      createdAt,
-      updatedAt,
+      id: answerComment.id.toString(),
+      authorId: answerComment.authorId.toString(),
+      answerId: answerComment.answerId.toString(),
+      content: answerComment.content,
+      createdAt: answerComment.createdAt,
+      updatedAt: answerComment?.updatedAt
+        ? answerComment?.updatedAt
+        : undefined,
     }
   }
 }
