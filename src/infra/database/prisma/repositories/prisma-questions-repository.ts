@@ -8,12 +8,14 @@ import { QuestionAttachmentsRepository } from '@/domain/forum/application/reposi
 import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-object/question-details'
 import { PrismaQuestionsDetailsMapper } from '../mappers/prisma-question-details-mapper'
 import { DomainEvents } from '@/core/events/domain-events'
+import { CacheRepository } from '@/infra/cache/cache-repository'
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly questionAttachmentsRepository: QuestionAttachmentsRepository,
+    private readonly cacheRepository: CacheRepository,
   ) {}
 
   async findById(questionId: string) {
@@ -33,6 +35,14 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   }
 
   async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
+    const cacheHit = await this.cacheRepository.get(`question:${slug}:details`)
+
+    if (cacheHit) {
+      const cachedData = JSON.parse(cacheHit)
+
+      return cachedData
+    }
+
     const question = await this.prisma.question.findUnique({
       where: { slug },
       include: {
@@ -41,7 +51,18 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       },
     })
 
-    return question ? PrismaQuestionsDetailsMapper.toDomain(question) : null
+    if (!question) {
+      return null
+    }
+
+    const questionDetails = PrismaQuestionsDetailsMapper.toDomain(question)
+
+    await this.cacheRepository.set(
+      `question:${slug}:details`,
+      JSON.stringify(questionDetails),
+    )
+
+    return questionDetails
   }
 
   async fetchManyRecent({ page }: PaginationParams): Promise<Question[]> {
@@ -82,6 +103,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       this.questionAttachmentsRepository.deleteMany(
         question.attachments.getRemovedItems(),
       ),
+      this.cacheRepository.delete(`question:${data.slug}:details`),
     ])
 
     DomainEvents.dispatchEventsForAggregate(question.id)
